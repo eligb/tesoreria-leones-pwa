@@ -250,14 +250,11 @@
       <!-- TAB 2: REGISTRAR INGRESO -->
       <section id="tab-ingreso" class="hidden">
         <div class="card">
-          <div class="card-title">Registrar Ingreso (Debe)</div>
+          <div class="card-title">Registrar Ingreso / Apertura (Debe)</div>
           <form onsubmit="enviarMovimiento(event, 'INGRESO')">
-            <label for="ingSocio">Socio que realiza el pago</label>
-            <select id="ingSocio" required></select>
-
             <div class="row-2">
               <div>
-                <label for="ingFondo">Fondo</label>
+                <label for="ingFondo">Fondo Destino</label>
                 <select id="ingFondo" required>
                   <option value="CLUB">Fondo del Club</option>
                   <option value="LCIF">LCIF</option>
@@ -265,20 +262,40 @@
                 </select>
               </div>
               <div>
-                <label for="ingCategoria">Concepto</label>
-                <select id="ingCategoria" required>
-                  <option value="Mensualidad">Mensualidad</option>
-                  <option value="LCIF">Aporte LCIF</option>
-                  <option value="Gobernacion">Cuota Gobernación</option>
-                  <option value="Actividad">Actividad / Evento</option>
-                  <option value="Otro">Otro Ingreso</option>
+                <label for="ingCategoria">Tipo de Ingreso</label>
+                <select id="ingCategoria" required onchange="alternarOrigenIngreso()">
+                  <option value="Mensualidad">Mensualidad Socio</option>
+                  <option value="LCIF">Aporte LCIF Socio</option>
+                  <option value="Gobernacion">Cuota Gobernación Socio</option>
+                  <option value="Cuota Especial">Cuota Especial Socio</option>
+                  <option value="Donacion">Donación Monetaria</option>
+                  <option value="Saldo Inicial">Saldo Inicial (Apertura)</option>
+                  <option value="Actividad">Recaudación Actividad</option>
                 </select>
               </div>
             </div>
 
+            <!-- Si es pago de socio -->
+            <div id="bloqueSocio">
+              <label for="ingSocio">Socio que realiza el pago</label>
+              <select id="ingSocio"></select>
+            </div>
+
+            <!-- Si es cuota especial -->
+            <div id="bloqueCuotaEsp" class="hidden">
+              <label for="ingCuotaEspSelect">¿Cuál Cuota Especial?</label>
+              <select id="ingCuotaEspSelect"></select>
+            </div>
+
+            <!-- Si es Donación o Saldo Inicial -->
+            <div id="bloqueOrigenExterno" class="hidden">
+              <label for="ingOrigenTexto">Origen / Donante / Nota de Apertura</label>
+              <input type="text" id="ingOrigenTexto" placeholder="Ej. Saldo cierre año 2025-2026 / Donación Sr. Juan" />
+            </div>
+
             <div class="row-2">
               <div>
-                <label for="ingFecha">Fecha del Pago</label>
+                <label for="ingFecha">Fecha de Operación</label>
                 <input type="date" id="ingFecha" required onchange="actualizarVistaConversion('ing')" />
               </div>
               <div>
@@ -289,7 +306,7 @@
 
             <div class="row-2">
               <div>
-                <label for="ingMoneda">Moneda Pagada</label>
+                <label for="ingMoneda">Moneda Recibida</label>
                 <select id="ingMoneda" onchange="actualizarVistaConversion('ing')">
                   <option value="BS">Bolívares (Bs)</option>
                   <option value="USD">Dólares ($)</option>
@@ -306,9 +323,9 @@
             </div>
 
             <label for="ingDesc">Referencia / Observación</label>
-            <input type="text" id="ingDesc" placeholder="Ej. Pago Móvil ref. 4829 - Noviembre" />
+            <input type="text" id="ingDesc" placeholder="Ej. Pago Móvil ref. 4829 / Efectivo caja" />
 
-            <button type="submit" class="btn btn-primary">Guardar Ingreso</button>
+            <button type="submit" class="btn btn-primary">Guardar en Libro Diario</button>
           </form>
         </div>
       </section>
@@ -493,6 +510,16 @@
       if (btn) btn.classList.add('active');
     }
 
+    function alternarOrigenIngreso() {
+      const cat = document.getElementById('ingCategoria').value;
+      const esExterno = ['Donacion', 'Saldo Inicial', 'Actividad'].includes(cat);
+      const esEspecial = cat === 'Cuota Especial';
+
+      document.getElementById('bloqueSocio').classList.toggle('hidden', esExterno);
+      document.getElementById('bloqueOrigenExterno').classList.toggle('hidden', !esExterno);
+      document.getElementById('bloqueCuotaEsp').classList.toggle('hidden', !esEspecial);
+    }
+
     async function cargarDashboard() {
       const r = await apiCall({ action: 'getDashboard', token: ESTADO.token, usuario: ESTADO.usuario });
       if (!r.ok) {
@@ -502,19 +529,24 @@
       }
 
       ESTADO.tasaHoy = Number(r.tasaHoy) || 0;
-      ESTADO.cuotasConfig = r.cuotasConfig || { mensualUsd: 0 };
+      ESTADO.cuotasConfig = r.cuotasConfig || { mensualUsd: 0, lcifUsd: 0, gobUsd: 0 };
+      ESTADO.cuotasEspeciales = r.cuotasEspeciales || [];
       ESTADO.socios = r.socios || [];
 
       document.getElementById('tasaHeader').textContent = `BCV: ${ESTADO.tasaHoy.toFixed(2)} Bs/$`;
-      document.getElementById('cuotaRefBadge').textContent = `Cuota: $${ESTADO.cuotasConfig.mensualUsd}/mes`;
+      document.getElementById('cuotaRefBadge').textContent =
+        `Club $${ESTADO.cuotasConfig.mensualUsd} | LCIF $${ESTADO.cuotasConfig.lcifUsd} | Gob $${ESTADO.cuotasConfig.gobUsd}`;
 
       pintarSaldo('Club', r.saldos.CLUB);
       pintarSaldo('Lcif', r.saldos.LCIF);
       pintarSaldo('Gob', r.saldos.GOBERNACION);
 
-      // Llenar selector de socios en Ingresos
-      const selSocio = document.getElementById('ingSocio');
-      selSocio.innerHTML = ESTADO.socios.map(s => `<option value="${s.nombre}">${s.nombre}</option>`).join('');
+      document.getElementById('ingSocio').innerHTML =
+        ESTADO.socios.map(s => `<option value="${s.nombre}">${s.nombre}</option>`).join('');
+
+      document.getElementById('ingCuotaEspSelect').innerHTML = ESTADO.cuotasEspeciales.length
+        ? ESTADO.cuotasEspeciales.map(c => `<option value="${c.concepto}">${c.concepto} ($${c.montoUsd})</option>`).join('')
+        : '<option value="Cuota Especial">Sin cuotas especiales activas</option>';
 
       pintarSociosYDeudas();
       pintarMovimientos(r.ultimosMovimientos || []);
@@ -522,31 +554,56 @@
       actualizarVistaConversion('egr');
     }
 
-    function pintarSaldo(key, obj) {
-      const usd = Number(obj?.usd || 0);
-      const bs = Number(obj?.bs || 0);
-      document.getElementById(`saldo${key}Usd`).textContent = `$${usd.toFixed(2)}`;
-      document.getElementById(`saldo${key}Bs`).textContent = `Bs ${bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
-
     function calcularDeudaSocio(socio) {
-      const cuota = Number(ESTADO.cuotasConfig.mensualUsd || 0);
-      if (cuota <= 0) return { mesesPagados: 0, deudaUsd: 0, deudaBs: 0 };
-
-      const totalMensualUsd = (socio.pagos || [])
-        .filter(p => p.categoria === 'Mensualidad')
-        .reduce((acc, p) => acc + Number(p.usd || 0), 0);
-
-      const mesesPagados = Math.floor(totalMensualUsd / cuota);
-      // Ejemplo simple: compara contra meses transcurridos del año leonístico (desde julio = mes 7)
+      const cfg = ESTADO.cuotasConfig;
       const hoy = new Date();
       const mesActual = hoy.getMonth() + 1;
-      const mesesTranscurridosDesdeJulio = mesActual >= 7 ? (mesActual - 7 + 1) : (mesActual + 6);
-      const mesesPendientes = Math.max(0, mesesTranscurridosDesdeJulio - mesesPagados);
-      const deudaUsd = Number((mesesPendientes * cuota).toFixed(2));
-      const deudaBs = Number((deudaUsd * ESTADO.tasaHoy).toFixed(2));
+      // Meses transcurridos en el año leonístico (Julio = 1 ... Junio = 12)
+      const mesesTranscurridos = mesActual >= 7 ? (mesActual - 7 + 1) : (mesActual + 6);
 
-      return { mesesPendientes, deudaUsd, deudaBs };
+      const sumarPagos = (cat) => (socio.pagos || [])
+        .filter(p => p.categoria === cat)
+        .reduce((acc, p) => acc + Number(p.usd || 0), 0);
+
+      // 1. Mensualidad Club
+      const mesesPagClub = cfg.mensualUsd > 0 ? Math.floor(sumarPagos('Mensualidad') / cfg.mensualUsd) : mesesTranscurridos;
+      const mesesDebClub = Math.max(0, mesesTranscurridos - mesesPagClub);
+      const usdClub = Number((mesesDebClub * cfg.mensualUsd).toFixed(2));
+
+      // 2. LCIF
+      const mesesPagLcif = cfg.lcifUsd > 0 ? Math.floor(sumarPagos('LCIF') / cfg.lcifUsd) : mesesTranscurridos;
+      const mesesDebLcif = Math.max(0, mesesTranscurridos - mesesPagLcif);
+      const usdLcif = Number((mesesDebLcif * cfg.lcifUsd).toFixed(2));
+
+      // 3. Gobernación
+      const mesesPagGob = cfg.gobUsd > 0 ? Math.floor(sumarPagos('Gobernacion') / cfg.gobUsd) : mesesTranscurridos;
+      const mesesDebGob = Math.max(0, mesesTranscurridos - mesesPagGob);
+      const usdGob = Number((mesesDebGob * cfg.gobUsd).toFixed(2));
+
+      // 4. Cuotas Especiales activas
+      let usdEsp = 0;
+      const especialesPendientes = [];
+      (ESTADO.cuotasEspeciales || []).forEach(ce => {
+        const pagadoCe = (socio.pagos || [])
+          .filter(p => p.categoria === 'Cuota Especial' && p.desc.toLowerCase().includes(ce.concepto.toLowerCase()))
+          .reduce((acc, p) => acc + Number(p.usd || 0), 0);
+        const falta = Math.max(0, ce.montoUsd - pagadoCe);
+        if (falta > 0.01) {
+          usdEsp += falta;
+          especialesPendientes.push(`${ce.concepto} ($${falta.toFixed(2)})`);
+        }
+      });
+
+      const detalle = [];
+      if (mesesDebClub > 0) detalle.push(`Club: ${mesesDebClub} mes(es) ($${usdClub.toFixed(2)})`);
+      if (mesesDebLcif > 0) detalle.push(`LCIF: ${mesesDebLcif} mes(es) ($${usdLcif.toFixed(2)})`);
+      if (mesesDebGob > 0) detalle.push(`Gobernación: ${mesesDebGob} mes(es) ($${usdGob.toFixed(2)})`);
+      if (especialesPendientes.length > 0) detalle.push(`Especiales: ${especialesPendientes.join(', ')}`);
+
+      const totalUsd = Number((usdClub + usdLcif + usdGob + usdEsp).toFixed(2));
+      const totalBs = Number((totalUsd * ESTADO.tasaHoy).toFixed(2));
+
+      return { totalUsd, totalBs, detalle };
     }
 
     function pintarSociosYDeudas() {
@@ -561,21 +618,25 @@
 
       contHome.innerHTML = ESTADO.socios.map(s => {
         const d = calcularDeudaSocio(s);
-        const pill = d.deudaUsd > 0
-          ? `<span class="pill-debt">Debe $${d.deudaUsd.toFixed(2)} (${d.mesesPendientes}m)</span>`
+        const pill = d.totalUsd > 0
+          ? `<span class="pill-debt">Debe $${d.totalUsd.toFixed(2)}</span>`
           : `<span class="pill-ok">Solvente</span>`;
+        const subtexto = d.totalUsd > 0
+          ? `${d.detalle.join(' • ')} | Eq: Bs ${d.totalBs.toFixed(2)}`
+          : 'Al día en Club, LCIF, Gobernación y especiales';
+
         return `
-          <div class="socio-card">
-            <div>
+          <div class="socio-card" style="align-items:flex-start;">
+            <div style="flex:1;">
               <div class="mov-title">${s.nombre}</div>
-              <div class="mov-meta">Eq. hoy: Bs ${d.deudaBs.toFixed(2)}</div>
+              <div class="mov-meta" style="margin-top:3px; line-height:1.35;">${subtexto}</div>
             </div>
             ${pill}
           </div>
         `;
       }).join('');
 
-      const morosos = ESTADO.socios.filter(s => calcularDeudaSocio(s).deudaUsd > 0);
+      const morosos = ESTADO.socios.filter(s => calcularDeudaSocio(s).totalUsd > 0);
       if (!morosos.length) {
         contCobros.innerHTML = '<p style="font-size:0.85rem; color:var(--ok); font-weight:600;">¡Todos los socios están al día!</p>';
         return;
@@ -585,19 +646,82 @@
         const d = calcularDeudaSocio(s);
         const tel = String(s.telefono || '').replace(/\D/g, '');
         const texto = encodeURIComponent(
-          `Hola ${s.nombre}, le saludamos desde la Tesorería del Club de Leones. Le recordamos su saldo pendiente de $${d.deudaUsd.toFixed(2)} (equiv. a Bs ${d.deudaBs.toFixed(2)} a tasa BCV de hoy). ¡Gracias!`
+          `Hola ${s.nombre}, le saludamos desde la Tesorería del Club de Leones.\n` +
+          `Detalle de saldo pendiente:\n- ${d.detalle.join('\n- ')}\n` +
+          `Total: $${d.totalUsd.toFixed(2)} (equiv. a Bs ${d.totalBs.toFixed(2)} a tasa BCV de hoy). ¡Muchas gracias!`
         );
         const waLink = tel ? `https://wa.me/${tel}?text=${texto}` : `https://wa.me/?text=${texto}`;
         return `
-          <div class="socio-card">
-            <div>
-              <div class="mov-title">${s.nombre}</div>
-              <div class="mov-meta">${d.mesesPendientes} mes(es) • $${d.deudaUsd.toFixed(2)} / Bs ${d.deudaBs.toFixed(2)}</div>
+          <div class="socio-card" style="align-items:flex-start;">
+            <div style="flex:1;">
+              <div class="mov-title">${s.nombre} — $${d.totalUsd.toFixed(2)}</div>
+              <div class="mov-meta" style="margin-top:3px; line-height:1.35;">${d.detalle.join(' • ')}</div>
             </div>
             <a class="btn-wa" href="${waLink}" target="_blank">WhatsApp</a>
           </div>
         `;
       }).join('');
+    }
+
+    async function enviarMovimiento(e, tipo) {
+      e.preventDefault();
+      const esIng = tipo === 'INGRESO';
+      const cat = document.getElementById(esIng ? 'ingCategoria' : 'egrCategoria').value;
+      const esExterno = esIng && ['Donacion', 'Saldo Inicial', 'Actividad'].includes(cat);
+
+      let sujeto = '';
+      if (!esIng) {
+        sujeto = document.getElementById('egrSujeto').value.trim();
+      } else if (esExterno) {
+        sujeto = document.getElementById('ingOrigenTexto').value.trim() || cat;
+      } else {
+        sujeto = document.getElementById('ingSocio').value;
+      }
+
+      let desc = document.getElementById(esIng ? 'ingDesc' : 'egrDesc').value.trim();
+      if (esIng && cat === 'Cuota Especial') {
+        const nombreCe = document.getElementById('ingCuotaEspSelect').value;
+        desc = `${nombreCe}${desc ? ' - ' + desc : ''}`;
+      }
+
+      const data = {
+        tipo,
+        fondo: document.getElementById(esIng ? 'ingFondo' : 'egrFondo').value,
+        categoria: cat,
+        sujeto,
+        fecha: document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value,
+        periodo: esIng ? document.getElementById('ingPeriodo').value : 'N/A',
+        moneda: document.getElementById(esIng ? 'ingMoneda' : 'egrMoneda').value,
+        monto: Number(document.getElementById(esIng ? 'ingMonto' : 'egrMonto').value),
+        descripcion: desc
+      };
+
+      const r = await apiCall({
+        action: 'registrarMovimiento',
+        token: ESTADO.token,
+        usuario: ESTADO.usuario,
+        data
+      });
+
+      if (!r.ok) return mostrarToast(r.error || 'No se pudo guardar');
+
+      mostrarToast(`Guardado: $${r.montoUsd.toFixed(2)} / Bs ${r.montoBs.toFixed(2)}`);
+      e.target.reset();
+      alternarOrigenIngreso();
+
+      const hoy = new Date().toISOString().split('T')[0];
+      document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value = hoy;
+      if (esIng) document.getElementById('ingPeriodo').value = hoy.slice(0, 7);
+
+      await cargarDashboard();
+      cambiarTab('tab-home', document.querySelector('.nav-btn[data-tab="tab-home"]'));
+    }
+
+    function pintarSaldo(key, obj) {
+      const usd = Number(obj?.usd || 0);
+      const bs = Number(obj?.bs || 0);
+      document.getElementById(`saldo${key}Usd`).textContent = `$${usd.toFixed(2)}`;
+      document.getElementById(`saldo${key}Bs`).textContent = `Bs ${bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     function pintarMovimientos(movs) {
@@ -652,43 +776,6 @@
       }
     }
 
-    async function enviarMovimiento(e, tipo) {
-      e.preventDefault();
-      const esIng = tipo === 'INGRESO';
-
-      const data = {
-        tipo,
-        fondo: document.getElementById(esIng ? 'ingFondo' : 'egrFondo').value,
-        categoria: document.getElementById(esIng ? 'ingCategoria' : 'egrCategoria').value,
-        sujeto: esIng
-          ? document.getElementById('ingSocio').value
-          : document.getElementById('egrSujeto').value.trim(),
-        fecha: document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value,
-        periodo: esIng ? document.getElementById('ingPeriodo').value : 'N/A',
-        moneda: document.getElementById(esIng ? 'ingMoneda' : 'egrMoneda').value,
-        monto: Number(document.getElementById(esIng ? 'ingMonto' : 'egrMonto').value),
-        descripcion: document.getElementById(esIng ? 'ingDesc' : 'egrDesc').value.trim()
-      };
-
-      const r = await apiCall({
-        action: 'registrarMovimiento',
-        token: ESTADO.token,
-        usuario: ESTADO.usuario,
-        data
-      });
-
-      if (!r.ok) return mostrarToast(r.error || 'No se pudo guardar');
-
-      mostrarToast(`Guardado: $${r.montoUsd.toFixed(2)} / Bs ${r.montoBs.toFixed(2)}`);
-      e.target.reset();
-
-      const hoy = new Date().toISOString().split('T')[0];
-      document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value = hoy;
-      if (esIng) document.getElementById('ingPeriodo').value = hoy.slice(0, 7);
-
-      await cargarDashboard();
-      cambiarTab('tab-home', document.querySelector('.nav-btn[data-tab="tab-home"]'));
-    }
   </script>
 </body>
 </html>
