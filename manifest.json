@@ -1,0 +1,17 @@
+{
+  "name": "Tesorería Club de Leones",
+  "short_name": "Leones Caja",
+  "description": "Control bimoneda Bs/USD, ingresos, egresos y solvencia de socios",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1f3a",
+  "theme_color": "#0b1f3a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

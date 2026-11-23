@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tesorería Club de Leones</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b1f3a" />
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --navy-light: #16345e;
+      --gold: #e0a800;
+      --gold-soft: #fff8e1;
+      --bg: #f3f5f9;
+      --card: #ffffff;
+      --text: #1c2430;
+      --muted: #64748b;
+      --ok: #15803d;
+      --ok-bg: #dcfce7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 84px; }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: #fff;
+      padding: 16px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .header-top { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+    .badge-tasa {
+      background: rgba(224, 168, 0, 0.2);
+      border: 1px solid var(--gold);
+      color: #ffd54f;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .sub-header { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; display: flex; justify-content: space-between; }
+
+    .container { padding: 14px; max-width: 640px; margin: 0 auto; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .card-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+    .grid-fondos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .fondo-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .fondo-name { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .fondo-usd { font-size: 1rem; font-weight: 800; color: var(--navy); margin: 4px 0 2px; }
+    .fondo-bs { font-size: 0.75rem; color: var(--muted); }
+
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 10px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--navy-light); border-color: transparent; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .conversion-box {
+      background: var(--gold-soft);
+      border: 1px solid #f5d061;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #5c4300;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+    .btn-primary { background: var(--navy); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--navy); color: var(--navy); padding: 6px 10px; font-size: 0.78rem; width: auto; margin-top: 0; }
+    .btn-wa { background: #16a34a; color: #fff; padding: 6px 10px; font-size: 0.78rem; width: auto; margin-top: 0; text-decoration: none; border-radius: 8px; display: inline-block; }
+
+    .mov-item {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .mov-item:last-child { border-bottom: none; }
+    .mov-title { font-size: 0.88rem; font-weight: 700; }
+    .mov-meta { font-size: 0.74rem; color: var(--muted); }
+    .monto-in { color: var(--ok); font-weight: 700; text-align: right; font-size: 0.88rem; }
+    .monto-out { color: var(--danger); font-weight: 700; text-align: right; font-size: 0.88rem; }
+
+    .socio-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .pill-ok { background: var(--ok-bg); color: var(--ok); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .pill-debt { background: var(--danger-bg); color: var(--danger); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 30;
+      padding: 6px 0 env(safe-area-inset-bottom);
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 600;
+      padding: 4px;
+      cursor: pointer;
+    }
+    .nav-btn.active { color: var(--navy); font-weight: 800; }
+    .nav-icon { font-size: 1.15rem; }
+
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed;
+      bottom: 76px; left: 50%; transform: translateX(-50%);
+      background: #0f172a; color: #fff;
+      padding: 10px 16px; border-radius: 10px;
+      font-size: 0.84rem; z-index: 50;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA LOGIN -->
+  <div id="loginScreen" class="container" style="padding-top: 36px;">
+    <div class="card">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="font-size:2rem;">🦁</div>
+        <h2 style="color:var(--navy); font-size:1.2rem;">Tesorería Club de Leones</h2>
+        <p style="font-size:0.82rem; color:var(--muted);">Acceso protegido para Junta Directiva / Tesorería</p>
+      </div>
+      <label for="loginUser">Usuario</label>
+      <input type="text" id="loginUser" placeholder="Ej. tesoreria" autocomplete="username" />
+
+      <label for="loginPin">PIN de Seguridad</label>
+      <input type="password" id="loginPin" inputmode="numeric" placeholder="••••" autocomplete="current-password" />
+
+      <button class="btn btn-primary" onclick="hacerLogin()">Ingresar al Sistema</button>
+    </div>
+  </div>
+
+  <!-- APP PRINCIPAL -->
+  <div id="appScreen" class="hidden">
+    <header>
+      <div class="header-top">
+        <div class="brand">🦁 Tesorería Leones</div>
+        <div class="badge-tasa" id="tasaHeader">BCV: -- Bs/$</div>
+      </div>
+      <div class="sub-header">
+        <span id="userInfo">Usuario</span>
+        <span onclick="cerrarSesion()" style="text-decoration:underline; cursor:pointer;">Salir</span>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- TAB 1: DASHBOARD Y DEUDORES -->
+      <section id="tab-home">
+        <div class="card">
+          <div class="card-title">
+            <span>Saldos Disponibles (Debe - Haber)</span>
+            <button class="btn btn-outline" onclick="cargarDashboard()">↻ Actualizar</button>
+          </div>
+          <div class="grid-fondos">
+            <div class="fondo-box">
+              <div class="fondo-name">Club</div>
+              <div class="fondo-usd" id="saldoClubUsd">$0.00</div>
+              <div class="fondo-bs" id="saldoClubBs">Bs 0.00</div>
+            </div>
+            <div class="fondo-box">
+              <div class="fondo-name">LCIF</div>
+              <div class="fondo-usd" id="saldoLcifUsd">$0.00</div>
+              <div class="fondo-bs" id="saldoLcifBs">Bs 0.00</div>
+            </div>
+            <div class="fondo-box">
+              <div class="fondo-name">Gobernación</div>
+              <div class="fondo-usd" id="saldoGobUsd">$0.00</div>
+              <div class="fondo-bs" id="saldoGobBs">Bs 0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Estado de Socios (Deudores y Solventes)</span>
+            <span id="cuotaRefBadge" style="font-size:0.74rem; color:var(--muted);"></span>
+          </div>
+          <div id="listaSocios">Cargando socios...</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Últimos Movimientos (Libro Diario)</div>
+          <div id="listaMovimientos">Cargando movimientos...</div>
+        </div>
+      </section>
+
+      <!-- TAB 2: REGISTRAR INGRESO -->
+      <section id="tab-ingreso" class="hidden">
+        <div class="card">
+          <div class="card-title">Registrar Ingreso (Debe)</div>
+          <form onsubmit="enviarMovimiento(event, 'INGRESO')">
+            <label for="ingSocio">Socio que realiza el pago</label>
+            <select id="ingSocio" required></select>
+
+            <div class="row-2">
+              <div>
+                <label for="ingFondo">Fondo</label>
+                <select id="ingFondo" required>
+                  <option value="CLUB">Fondo del Club</option>
+                  <option value="LCIF">LCIF</option>
+                  <option value="GOBERNACION">Gobernación / Distrito</option>
+                </select>
+              </div>
+              <div>
+                <label for="ingCategoria">Concepto</label>
+                <select id="ingCategoria" required>
+                  <option value="Mensualidad">Mensualidad</option>
+                  <option value="LCIF">Aporte LCIF</option>
+                  <option value="Gobernacion">Cuota Gobernación</option>
+                  <option value="Actividad">Actividad / Evento</option>
+                  <option value="Otro">Otro Ingreso</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label for="ingFecha">Fecha del Pago</label>
+                <input type="date" id="ingFecha" required onchange="actualizarVistaConversion('ing')" />
+              </div>
+              <div>
+                <label for="ingPeriodo">Mes / Período</label>
+                <input type="month" id="ingPeriodo" />
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label for="ingMoneda">Moneda Pagada</label>
+                <select id="ingMoneda" onchange="actualizarVistaConversion('ing')">
+                  <option value="BS">Bolívares (Bs)</option>
+                  <option value="USD">Dólares ($)</option>
+                </select>
+              </div>
+              <div>
+                <label for="ingMonto">Monto</label>
+                <input type="number" step="0.01" min="0.01" id="ingMonto" required oninput="actualizarVistaConversion('ing')" placeholder="0.00" />
+              </div>
+            </div>
+
+            <div class="conversion-box" id="ingConversion">
+              Tasa BCV aplicada: -- | Equivalente estimado: --
+            </div>
+
+            <label for="ingDesc">Referencia / Observación</label>
+            <input type="text" id="ingDesc" placeholder="Ej. Pago Móvil ref. 4829 - Noviembre" />
+
+            <button type="submit" class="btn btn-primary">Guardar Ingreso</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 3: REGISTRAR EGRESO (ACTIVIDADES / EMERGENCIAS) -->
+      <section id="tab-egreso" class="hidden">
+        <div class="card">
+          <div class="card-title">Registrar Egreso (Haber)</div>
+          <form onsubmit="enviarMovimiento(event, 'EGRESO')">
+            <div class="row-2">
+              <div>
+                <label for="egrFondo">Fondo Afectado</label>
+                <select id="egrFondo" required>
+                  <option value="CLUB">Fondo del Club</option>
+                  <option value="LCIF">LCIF</option>
+                  <option value="GOBERNACION">Gobernación / Distrito</option>
+                </select>
+              </div>
+              <div>
+                <label for="egrCategoria">Motivo del Egreso</label>
+                <select id="egrCategoria" required>
+                  <option value="Actividad">Actividad del Club</option>
+                  <option value="Emergencia">Emergencia / Operativo Social</option>
+                  <option value="Remesa">Remesa LCIF / Gobernación</option>
+                  <option value="Gasto">Gasto Administrativo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label for="egrFecha">Fecha del Egreso</label>
+                <input type="date" id="egrFecha" required onchange="actualizarVistaConversion('egr')" />
+              </div>
+              <div>
+                <label for="egrSujeto">Beneficiario / Proveedor</label>
+                <input type="text" id="egrSujeto" required placeholder="Ej. Farmacia / Comité Actividad" />
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label for="egrMoneda">Moneda</label>
+                <select id="egrMoneda" onchange="actualizarVistaConversion('egr')">
+                  <option value="BS">Bolívares (Bs)</option>
+                  <option value="USD">Dólares ($)</option>
+                </select>
+              </div>
+              <div>
+                <label for="egrMonto">Monto</label>
+                <input type="number" step="0.01" min="0.01" id="egrMonto" required oninput="actualizarVistaConversion('egr')" placeholder="0.00" />
+              </div>
+            </div>
+
+            <div class="conversion-box" id="egrConversion">
+              Tasa BCV aplicada: -- | Equivalente estimado: --
+            </div>
+
+            <label for="egrDesc">Detalle / Soporte de Recibo</label>
+            <textarea id="egrDesc" rows="2" required placeholder="Describe la actividad, emergencia o soporte del gasto..."></textarea>
+
+            <button type="submit" class="btn btn-danger">Registrar Egreso en Haber</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: DEUDORES DETALLADO -->
+      <section id="tab-deudores" class="hidden">
+        <div class="card">
+          <div class="card-title">Recordatorios de Cobro por WhatsApp</div>
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:10px;">
+            Calculado según la cuota mensual configurada en USD y convertido a la tasa BCV actual.
+          </p>
+          <div id="listaCobros">Cargando...</div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="tab-home" onclick="cambiarTab('tab-home', this)">
+        <span class="nav-icon">📊</span><span>Caja</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-ingreso" onclick="cambiarTab('tab-ingreso', this)">
+        <span class="nav-icon">➕</span><span>Ingreso</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-egreso" onclick="cambiarTab('tab-egreso', this)">
+        <span class="nav-icon">➖</span><span>Egreso</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-deudores" onclick="cambiarTab('tab-deudores', this)">
+        <span class="nav-icon">📋</span><span>Deudores</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxWzPr9KEiBkmaM_X4R_g6gIrpwexgMgfpwkLrP1PWbtmN2dAZO5z0MElcz8UVYZdU/exec';
+    let ESTADO = {
+      token: sessionStorage.getItem('leones_token') || '',
+      usuario: sessionStorage.getItem('leones_user') || '',
+      nombre: sessionStorage.getItem('leones_nombre') || '',
+      rol: sessionStorage.getItem('leones_rol') || '',
+      tasaHoy: 0,
+      cuotasConfig: { mensualUsd: 0 },
+      socios: []
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hoy = new Date().toISOString().split('T')[0];
+      const mesActual = hoy.slice(0, 7);
+      document.getElementById('ingFecha').value = hoy;
+      document.getElementById('egrFecha').value = hoy;
+      document.getElementById('ingPeriodo').value = mesActual;
+
+      if (ESTADO.token) {
+        mostrarApp();
+        cargarDashboard();
+      }
+    });
+
+    function mostrarToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    async function apiCall(payload) {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }
+
+    async function hacerLogin() {
+      const usuario = document.getElementById('loginUser').value.trim();
+      const pin = document.getElementById('loginPin').value.trim();
+      if (!usuario || !pin) return mostrarToast('Ingresa usuario y PIN');
+
+      const r = await apiCall({ action: 'login', usuario, pin });
+      if (!r.ok) return mostrarToast(r.error || 'Error de acceso');
+
+      ESTADO.token = r.token;
+      ESTADO.usuario = r.usuario;
+      ESTADO.nombre = r.nombre;
+      ESTADO.rol = r.rol;
+
+      sessionStorage.setItem('leones_token', r.token);
+      sessionStorage.setItem('leones_user', r.usuario);
+      sessionStorage.setItem('leones_nombre', r.nombre);
+      sessionStorage.setItem('leones_rol', r.rol);
+
+      mostrarApp();
+      cargarDashboard();
+    }
+
+    function cerrarSesion() {
+      sessionStorage.clear();
+      ESTADO.token = '';
+      document.getElementById('appScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function mostrarApp() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('appScreen').classList.remove('hidden');
+      document.getElementById('userInfo').textContent = `${ESTADO.nombre} (${ESTADO.rol})`;
+    }
+
+    function cambiarTab(tabId, btn) {
+      ['tab-home', 'tab-ingreso', 'tab-egreso', 'tab-deudores'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    async function cargarDashboard() {
+      const r = await apiCall({ action: 'getDashboard', token: ESTADO.token, usuario: ESTADO.usuario });
+      if (!r.ok) {
+        mostrarToast(r.error || 'Sesión expirada');
+        if (r.error && r.error.toLowerCase().includes('sesión')) cerrarSesion();
+        return;
+      }
+
+      ESTADO.tasaHoy = Number(r.tasaHoy) || 0;
+      ESTADO.cuotasConfig = r.cuotasConfig || { mensualUsd: 0 };
+      ESTADO.socios = r.socios || [];
+
+      document.getElementById('tasaHeader').textContent = `BCV: ${ESTADO.tasaHoy.toFixed(2)} Bs/$`;
+      document.getElementById('cuotaRefBadge').textContent = `Cuota: $${ESTADO.cuotasConfig.mensualUsd}/mes`;
+
+      pintarSaldo('Club', r.saldos.CLUB);
+      pintarSaldo('Lcif', r.saldos.LCIF);
+      pintarSaldo('Gob', r.saldos.GOBERNACION);
+
+      // Llenar selector de socios en Ingresos
+      const selSocio = document.getElementById('ingSocio');
+      selSocio.innerHTML = ESTADO.socios.map(s => `<option value="${s.nombre}">${s.nombre}</option>`).join('');
+
+      pintarSociosYDeudas();
+      pintarMovimientos(r.ultimosMovimientos || []);
+      actualizarVistaConversion('ing');
+      actualizarVistaConversion('egr');
+    }
+
+    function pintarSaldo(key, obj) {
+      const usd = Number(obj?.usd || 0);
+      const bs = Number(obj?.bs || 0);
+      document.getElementById(`saldo${key}Usd`).textContent = `$${usd.toFixed(2)}`;
+      document.getElementById(`saldo${key}Bs`).textContent = `Bs ${bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    function calcularDeudaSocio(socio) {
+      const cuota = Number(ESTADO.cuotasConfig.mensualUsd || 0);
+      if (cuota <= 0) return { mesesPagados: 0, deudaUsd: 0, deudaBs: 0 };
+
+      const totalMensualUsd = (socio.pagos || [])
+        .filter(p => p.categoria === 'Mensualidad')
+        .reduce((acc, p) => acc + Number(p.usd || 0), 0);
+
+      const mesesPagados = Math.floor(totalMensualUsd / cuota);
+      // Ejemplo simple: compara contra meses transcurridos del año leonístico (desde julio = mes 7)
+      const hoy = new Date();
+      const mesActual = hoy.getMonth() + 1;
+      const mesesTranscurridosDesdeJulio = mesActual >= 7 ? (mesActual - 7 + 1) : (mesActual + 6);
+      const mesesPendientes = Math.max(0, mesesTranscurridosDesdeJulio - mesesPagados);
+      const deudaUsd = Number((mesesPendientes * cuota).toFixed(2));
+      const deudaBs = Number((deudaUsd * ESTADO.tasaHoy).toFixed(2));
+
+      return { mesesPendientes, deudaUsd, deudaBs };
+    }
+
+    function pintarSociosYDeudas() {
+      const contHome = document.getElementById('listaSocios');
+      const contCobros = document.getElementById('listaCobros');
+
+      if (!ESTADO.socios.length) {
+        contHome.innerHTML = '<p style="font-size:0.82rem; color:var(--muted);">No hay socios registrados.</p>';
+        contCobros.innerHTML = contHome.innerHTML;
+        return;
+      }
+
+      contHome.innerHTML = ESTADO.socios.map(s => {
+        const d = calcularDeudaSocio(s);
+        const pill = d.deudaUsd > 0
+          ? `<span class="pill-debt">Debe $${d.deudaUsd.toFixed(2)} (${d.mesesPendientes}m)</span>`
+          : `<span class="pill-ok">Solvente</span>`;
+        return `
+          <div class="socio-card">
+            <div>
+              <div class="mov-title">${s.nombre}</div>
+              <div class="mov-meta">Eq. hoy: Bs ${d.deudaBs.toFixed(2)}</div>
+            </div>
+            ${pill}
+          </div>
+        `;
+      }).join('');
+
+      const morosos = ESTADO.socios.filter(s => calcularDeudaSocio(s).deudaUsd > 0);
+      if (!morosos.length) {
+        contCobros.innerHTML = '<p style="font-size:0.85rem; color:var(--ok); font-weight:600;">¡Todos los socios están al día!</p>';
+        return;
+      }
+
+      contCobros.innerHTML = morosos.map(s => {
+        const d = calcularDeudaSocio(s);
+        const tel = String(s.telefono || '').replace(/\D/g, '');
+        const texto = encodeURIComponent(
+          `Hola ${s.nombre}, le saludamos desde la Tesorería del Club de Leones. Le recordamos su saldo pendiente de $${d.deudaUsd.toFixed(2)} (equiv. a Bs ${d.deudaBs.toFixed(2)} a tasa BCV de hoy). ¡Gracias!`
+        );
+        const waLink = tel ? `https://wa.me/${tel}?text=${texto}` : `https://wa.me/?text=${texto}`;
+        return `
+          <div class="socio-card">
+            <div>
+              <div class="mov-title">${s.nombre}</div>
+              <div class="mov-meta">${d.mesesPendientes} mes(es) • $${d.deudaUsd.toFixed(2)} / Bs ${d.deudaBs.toFixed(2)}</div>
+            </div>
+            <a class="btn-wa" href="${waLink}" target="_blank">WhatsApp</a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function pintarMovimientos(movs) {
+      const cont = document.getElementById('listaMovimientos');
+      if (!movs.length) {
+        cont.innerHTML = '<p style="font-size:0.82rem; color:var(--muted);">Sin movimientos registrados aún.</p>';
+        return;
+      }
+
+      cont.innerHTML = movs.map(m => {
+        const esIng = m.tipo === 'INGRESO';
+        const montoUsd = esIng ? Number(m.dUsd || 0) : Number(m.hUsd || 0);
+        const montoBs = esIng ? Number(m.dBs || 0) : Number(m.hBs || 0);
+        return `
+          <div class="mov-item">
+            <div>
+              <div class="mov-title">${m.sujeto} • <span style="color:var(--muted); font-weight:600;">${m.cat}</span></div>
+              <div class="mov-meta">${m.fecha} • Fondo ${m.fondo} • Tasa ${Number(m.tasa || 0).toFixed(2)}</div>
+            </div>
+            <div class="${esIng ? 'monto-in' : 'monto-out'}">
+              ${esIng ? '+' : '-'}$${montoUsd.toFixed(2)}
+              <div class="mov-meta">Bs ${montoBs.toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function actualizarVistaConversion(prefijo) {
+      const fecha = document.getElementById(`${prefijo}Fecha`).value;
+      const moneda = document.getElementById(`${prefijo}Moneda`).value;
+      const monto = Number(document.getElementById(`${prefijo}Monto`).value || 0);
+      const box = document.getElementById(`${prefijo}Conversion`);
+
+      let tasa = ESTADO.tasaHoy;
+      if (fecha) {
+        const resp = await apiCall({ action: 'getTasaFecha', token: ESTADO.token, usuario: ESTADO.usuario, fecha });
+        if (resp.ok && Number(resp.tasa) > 0) tasa = Number(resp.tasa);
+      }
+
+      if (!tasa || monto <= 0) {
+        box.textContent = `Tasa BCV (${fecha || 'hoy'}): ${tasa ? tasa.toFixed(2) + ' Bs/$' : 'no disponible'}`;
+        return;
+      }
+
+      if (moneda === 'BS') {
+        const usd = (monto / tasa).toFixed(2);
+        box.textContent = `Tasa BCV (${fecha}): ${tasa.toFixed(2)} Bs/$ → Equivale a $${usd} USD`;
+      } else {
+        const bs = (monto * tasa).toFixed(2);
+        box.textContent = `Tasa BCV (${fecha}): ${tasa.toFixed(2)} Bs/$ → Equivale a Bs ${bs}`;
+      }
+    }
+
+    async function enviarMovimiento(e, tipo) {
+      e.preventDefault();
+      const esIng = tipo === 'INGRESO';
+
+      const data = {
+        tipo,
+        fondo: document.getElementById(esIng ? 'ingFondo' : 'egrFondo').value,
+        categoria: document.getElementById(esIng ? 'ingCategoria' : 'egrCategoria').value,
+        sujeto: esIng
+          ? document.getElementById('ingSocio').value
+          : document.getElementById('egrSujeto').value.trim(),
+        fecha: document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value,
+        periodo: esIng ? document.getElementById('ingPeriodo').value : 'N/A',
+        moneda: document.getElementById(esIng ? 'ingMoneda' : 'egrMoneda').value,
+        monto: Number(document.getElementById(esIng ? 'ingMonto' : 'egrMonto').value),
+        descripcion: document.getElementById(esIng ? 'ingDesc' : 'egrDesc').value.trim()
+      };
+
+      const r = await apiCall({
+        action: 'registrarMovimiento',
+        token: ESTADO.token,
+        usuario: ESTADO.usuario,
+        data
+      });
+
+      if (!r.ok) return mostrarToast(r.error || 'No se pudo guardar');
+
+      mostrarToast(`Guardado: $${r.montoUsd.toFixed(2)} / Bs ${r.montoBs.toFixed(2)}`);
+      e.target.reset();
+
+      const hoy = new Date().toISOString().split('T')[0];
+      document.getElementById(esIng ? 'ingFecha' : 'egrFecha').value = hoy;
+      if (esIng) document.getElementById('ingPeriodo').value = hoy.slice(0, 7);
+
+      await cargarDashboard();
+      cambiarTab('tab-home', document.querySelector('.nav-btn[data-tab="tab-home"]'));
+    }
+  </script>
+</body>
+</html>
