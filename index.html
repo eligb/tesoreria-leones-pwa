@@ -253,6 +253,24 @@
 
         <div class="card">
           <div class="card-title">
+            <span>Arqueo: Efectivo Físico vs. Banco / Digital</span>
+          </div>
+          <div class="row-2">
+            <div class="fondo-box" style="text-align:left; padding:10px;">
+              <div class="fondo-name">💵 Efectivo en Mano</div>
+              <div class="fondo-bs" id="arqEfectivoUsd">$0.00 USD</div>
+              <div class="fondo-usd" id="arqEfectivoBs">Bs 0,00</div>
+            </div>
+            <div class="fondo-box" style="text-align:left; padding:10px;">
+              <div class="fondo-name">🏦 Banco / Digital</div>
+              <div class="fondo-bs" id="arqBancoBs">Bs 0,00</div>
+              <div class="fondo-usd" id="arqBancoUsd">$0.00 USD</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
             <span>Estado de Socios</span>
             <span id="cuotaRefBadge" style="font-size:0.72rem; color:var(--muted);"></span>
           </div>
@@ -324,6 +342,14 @@
               <input type="number" step="0.0001" min="0.01" id="ingTasaManual" oninput="actualizarVistaConversion('ing')" placeholder="Ej. 38.50" />
             </div>
 
+            <label for="ingMetodo">Forma / Canal del Dinero</label>
+            <select id="ingMetodo" onchange="ajustarMonedaPorCanal('ing')">
+              <option value="Pago Móvil / Transf. Bs">Pago Móvil / Transferencia Bs</option>
+              <option value="Efectivo USD">💵 Efectivo Físico USD (Billetes)</option>
+              <option value="Efectivo Bs">💵 Efectivo Físico Bs</option>
+              <option value="Zelle / Digital USD">Zelle / Digital USD</option>
+            </select>
+
             <div class="row-2">
               <div>
                 <label for="ingMoneda">Moneda Recibida</label>
@@ -390,6 +416,14 @@
               <label for="egrTasaManual">Tasa BCV histórica de esa fecha (Bs/$)</label>
               <input type="number" step="0.0001" min="0.01" id="egrTasaManual" oninput="actualizarVistaConversion('egr')" placeholder="Ej. 38.50" />
             </div>
+
+            <label for="egrMetodo">Forma / Canal de Salida</label>
+            <select id="egrMetodo" onchange="ajustarMonedaPorCanal('egr')">
+              <option value="Pago Móvil / Transf. Bs">Pago Móvil / Transferencia Bs</option>
+              <option value="Efectivo USD">💵 Efectivo Físico USD (Billetes)</option>
+              <option value="Efectivo Bs">💵 Efectivo Físico Bs</option>
+              <option value="Zelle / Digital USD">Zelle / Digital USD</option>
+            </select>
 
             <div class="row-2">
               <div>
@@ -597,6 +631,17 @@
       document.getElementById('bloqueCuotaEsp').classList.toggle('hidden', !esEspecial);
     }
 
+    function ajustarMonedaPorCanal(prefijo) {
+      const metodo = document.getElementById(`${prefijo}Metodo`).value;
+      const selMoneda = document.getElementById(`${prefijo}Moneda`);
+      if (metodo.includes('USD')) {
+        selMoneda.value = 'USD';
+      } else if (metodo.includes('Bs')) {
+        selMoneda.value = 'BS';
+      }
+      actualizarVistaConversion(prefijo);
+    }
+
     async function cargarDashboard() {
       const r = await apiCall({ action: 'getDashboard', token: ESTADO.token, usuario: ESTADO.usuario });
       if (!r.ok) {
@@ -615,9 +660,16 @@
       document.getElementById('cuotaRefBadge').textContent =
         `Club $${ESTADO.cuotasConfig.mensualUsd} | LCIF $${ESTADO.cuotasConfig.lcifUsd} | Gob $${ESTADO.cuotasConfig.gobUsd}`;
 
-      pintarSaldo('Club', r.saldos.CLUB);
-      pintarSaldo('Lcif', r.saldos.LCIF);
-      pintarSaldo('Gob', r.saldos.GOBERNACION);
+      pintarSaldo('Club', r.saldos?.CLUB);
+      pintarSaldo('Lcif', r.saldos?.LCIF);
+      pintarSaldo('Gob', r.saldos?.GOBERNACION);
+
+      if (r.custodia) {
+        document.getElementById('arqEfectivoUsd').textContent = `$${Number(r.custodia.efectivoUsd || 0).toFixed(2)} USD`;
+        document.getElementById('arqEfectivoBs').textContent = fmtBs(r.custodia.efectivoBs || 0);
+        document.getElementById('arqBancoBs').textContent = fmtBs(r.custodia.bancoBs || 0);
+        document.getElementById('arqBancoUsd').textContent = `$${Number(r.custodia.bancoUsd || 0).toFixed(2)} USD`;
+      }
 
       document.getElementById('ingSocio').innerHTML =
         ESTADO.socios.map(s => `<option value="${s.nombre}">${s.nombre}</option>`).join('');
@@ -760,7 +812,7 @@
             <div>
               <div class="mov-title">${m.sujeto} • <span style="color:var(--muted); font-weight:600;">${m.cat}</span></div>
               ${m.desc ? `<div class="mov-desc">${m.desc}</div>` : ''}
-              <div class="mov-meta">${m.fecha} • ${m.fondo} • Tasa ${Number(m.tasa || 0).toFixed(2)}</div>
+              <div class="mov-meta">${m.fecha} • ${m.fondo} • ${m.metodoPago || 'Digital'} • Tasa ${Number(m.tasa || 0).toFixed(2)}</div>
             </div>
             <div class="${esIng ? 'monto-in' : 'monto-out'}">
               ${esIng ? '+' : '-'}${fmtBs(montoBs)}
@@ -772,7 +824,7 @@
     }
 
     function pintarLibroMensual() {
-      const mesSel = document.getElementById('filtroMesLibro').value; // YYYY-MM
+      const mesSel = document.getElementById('filtroMesLibro').value;
       const tipoSel = document.getElementById('filtroTipoLibro').value;
       const cont = document.getElementById('listaLibroMensual');
 
@@ -805,7 +857,7 @@
             <div>
               <div class="mov-title">${m.fecha} — ${m.sujeto} <span style="color:var(--muted); font-weight:600;">(${m.categoria})</span></div>
               <div class="mov-desc">${m.descripcion || 'Sin descripción'}</div>
-              <div class="mov-meta">Fondo: ${m.fondo} • ${esIng ? 'DEBE' : 'HABER'} • Tasa fecha: ${Number(m.tasa || 0).toFixed(2)}</div>
+              <div class="mov-meta">Fondo: ${m.fondo} • ${m.metodoPago || 'Digital'} • ${esIng ? 'DEBE' : 'HABER'} • Tasa fecha: ${Number(m.tasa || 0).toFixed(2)}</div>
             </div>
             <div class="${esIng ? 'monto-in' : 'monto-out'}">
               ${esIng ? '+' : '-'}${fmtBs(bs)}
@@ -895,6 +947,7 @@
         periodo: esIng ? document.getElementById('ingPeriodo').value : 'N/A',
         moneda: document.getElementById(esIng ? 'ingMoneda' : 'egrMoneda').value,
         monto: Number(document.getElementById(esIng ? 'ingMonto' : 'egrMonto').value),
+        metodoPago: document.getElementById(esIng ? 'ingMetodo' : 'egrMetodo').value,
         tasaManual: tasaManualVal > 0 ? tasaManualVal : null,
         descripcion: desc
       };
