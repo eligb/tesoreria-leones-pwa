@@ -29,26 +29,26 @@
     header {
       background: linear-gradient(135deg, var(--navy), var(--navy-light));
       color: #fff;
-      padding: 16px 18px;
+      padding: 15px 16px;
       position: sticky;
       top: 0;
       z-index: 20;
       box-shadow: 0 2px 10px rgba(0,0,0,0.12);
     }
     .header-top { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+    .brand { font-weight: 700; font-size: 1.02rem; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
     .badge-tasa {
       background: rgba(224, 168, 0, 0.2);
       border: 1px solid var(--gold);
       color: #ffd54f;
       padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
     }
-    .sub-header { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; display: flex; justify-content: space-between; }
+    .sub-header { font-size: 0.76rem; color: #cbd5e1; margin-top: 4px; display: flex; justify-content: space-between; }
 
-    .container { padding: 14px; max-width: 640px; margin: 0 auto; }
+    .container { padding: 14px; max-width: 680px; margin: 0 auto; }
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -57,19 +57,19 @@
       margin-bottom: 12px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .card-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .card-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 
     .grid-fondos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .fondo-box {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 10px 8px;
+      padding: 10px 6px;
       text-align: center;
     }
-    .fondo-name { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-    .fondo-usd { font-size: 1rem; font-weight: 800; color: var(--navy); margin: 4px 0 2px; }
-    .fondo-bs { font-size: 0.75rem; color: var(--muted); }
+    .fondo-name { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .fondo-bs { font-size: 0.9rem; font-weight: 800; color: var(--navy); margin: 4px 0 2px; }
+    .fondo-usd { font-size: 0.74rem; color: var(--muted); font-weight: 600; }
 
     label { display: block; font-size: 0.8rem; font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 10px; }
     input, select, textarea {
@@ -77,7 +77,7 @@
       padding: 10px 12px;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       background: #fff;
       color: var(--text);
     }
@@ -90,8 +90,9 @@
       border-radius: 10px;
       padding: 10px 12px;
       margin-top: 10px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #5c4300;
+      line-height: 1.35;
     }
 
     .btn {
@@ -99,29 +100,46 @@
       padding: 12px;
       border: none;
       border-radius: 10px;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 700;
       cursor: pointer;
       margin-top: 14px;
     }
     .btn-primary { background: var(--navy); color: #fff; }
     .btn-danger { background: var(--danger); color: #fff; }
-    .btn-outline { background: transparent; border: 1px solid var(--navy); color: var(--navy); padding: 6px 10px; font-size: 0.78rem; width: auto; margin-top: 0; }
-    .btn-wa { background: #16a34a; color: #fff; padding: 6px 10px; font-size: 0.78rem; width: auto; margin-top: 0; text-decoration: none; border-radius: 8px; display: inline-block; }
+    .btn-outline { background: transparent; border: 1px solid var(--navy); color: var(--navy); padding: 6px 10px; font-size: 0.76rem; width: auto; margin-top: 0; border-radius: 8px; cursor: pointer; }
+    .btn-wa { background: #16a34a; color: #fff; padding: 6px 10px; font-size: 0.76rem; width: auto; margin-top: 0; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; }
 
     .mov-item {
       border-bottom: 1px solid var(--border);
       padding: 10px 0;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
     }
     .mov-item:last-child { border-bottom: none; }
     .mov-title { font-size: 0.88rem; font-weight: 700; }
-    .mov-meta { font-size: 0.74rem; color: var(--muted); }
-    .monto-in { color: var(--ok); font-weight: 700; text-align: right; font-size: 0.88rem; }
-    .monto-out { color: var(--danger); font-weight: 700; text-align: right; font-size: 0.88rem; }
+    .mov-desc { font-size: 0.78rem; color: #334155; margin-top: 2px; }
+    .mov-meta { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .monto-in { color: var(--ok); font-weight: 700; text-align: right; font-size: 0.86rem; white-space: nowrap; }
+    .monto-out { color: var(--danger); font-weight: 700; text-align: right; font-size: 0.86rem; white-space: nowrap; }
+
+    .resumen-mes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+    .mini-stat {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+    }
+    .mini-label { font-size: 0.68rem; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+    .mini-val { font-size: 0.84rem; font-weight: 800; margin-top: 2px; }
 
     .socio-card {
       border: 1px solid var(--border);
@@ -133,8 +151,8 @@
       align-items: center;
       gap: 8px;
     }
-    .pill-ok { background: var(--ok-bg); color: var(--ok); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
-    .pill-debt { background: var(--danger-bg); color: var(--danger); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .pill-ok { background: var(--ok-bg); color: var(--ok); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+    .pill-debt { background: var(--danger-bg); color: var(--danger); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
 
     nav.bottom-nav {
       position: fixed;
@@ -142,7 +160,7 @@
       background: #fff;
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       z-index: 30;
       padding: 6px 0 env(safe-area-inset-bottom);
     }
@@ -153,14 +171,14 @@
       flex-direction: column;
       align-items: center;
       gap: 2px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--muted);
       font-weight: 600;
-      padding: 4px;
+      padding: 4px 2px;
       cursor: pointer;
     }
     .nav-btn.active { color: var(--navy); font-weight: 800; }
-    .nav-icon { font-size: 1.15rem; }
+    .nav-icon { font-size: 1.08rem; }
 
     .hidden { display: none !important; }
     .toast {
@@ -198,7 +216,7 @@
     <header>
       <div class="header-top">
         <div class="brand">🦁 Tesorería Leones</div>
-        <div class="badge-tasa" id="tasaHeader">BCV: -- Bs/$</div>
+        <div class="badge-tasa" id="tasaHeader">BCV hoy: -- Bs/$</div>
       </div>
       <div class="sub-header">
         <span id="userInfo">Usuario</span>
@@ -207,47 +225,47 @@
     </header>
 
     <main class="container">
-      <!-- TAB 1: DASHBOARD Y DEUDORES -->
+      <!-- TAB 1: CAJA Y DEUDORES -->
       <section id="tab-home">
         <div class="card">
           <div class="card-title">
-            <span>Saldos Disponibles (Debe - Haber)</span>
-            <button class="btn btn-outline" onclick="cargarDashboard()">↻ Actualizar</button>
+            <span>Saldos en Bs y Eq. USD (BCV Hoy)</span>
+            <button class="btn-outline" onclick="cargarDashboard()">↻ Actualizar</button>
           </div>
           <div class="grid-fondos">
             <div class="fondo-box">
               <div class="fondo-name">Club</div>
+              <div class="fondo-bs" id="saldoClubBs">Bs 0,00</div>
               <div class="fondo-usd" id="saldoClubUsd">$0.00</div>
-              <div class="fondo-bs" id="saldoClubBs">Bs 0.00</div>
             </div>
             <div class="fondo-box">
               <div class="fondo-name">LCIF</div>
+              <div class="fondo-bs" id="saldoLcifBs">Bs 0,00</div>
               <div class="fondo-usd" id="saldoLcifUsd">$0.00</div>
-              <div class="fondo-bs" id="saldoLcifBs">Bs 0.00</div>
             </div>
             <div class="fondo-box">
               <div class="fondo-name">Gobernación</div>
+              <div class="fondo-bs" id="saldoGobBs">Bs 0,00</div>
               <div class="fondo-usd" id="saldoGobUsd">$0.00</div>
-              <div class="fondo-bs" id="saldoGobBs">Bs 0.00</div>
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-title">
-            <span>Estado de Socios (Deudores y Solventes)</span>
-            <span id="cuotaRefBadge" style="font-size:0.74rem; color:var(--muted);"></span>
+            <span>Estado de Socios</span>
+            <span id="cuotaRefBadge" style="font-size:0.72rem; color:var(--muted);"></span>
           </div>
           <div id="listaSocios">Cargando socios...</div>
         </div>
 
         <div class="card">
-          <div class="card-title">Últimos Movimientos (Libro Diario)</div>
+          <div class="card-title">Últimos Movimientos</div>
           <div id="listaMovimientos">Cargando movimientos...</div>
         </div>
       </section>
 
-      <!-- TAB 2: REGISTRAR INGRESO -->
+      <!-- TAB 2: INGRESOS -->
       <section id="tab-ingreso" class="hidden">
         <div class="card">
           <div class="card-title">Registrar Ingreso / Apertura (Debe)</div>
@@ -275,22 +293,19 @@
               </div>
             </div>
 
-            <!-- Si es pago de socio -->
             <div id="bloqueSocio">
               <label for="ingSocio">Socio que realiza el pago</label>
               <select id="ingSocio"></select>
             </div>
 
-            <!-- Si es cuota especial -->
             <div id="bloqueCuotaEsp" class="hidden">
               <label for="ingCuotaEspSelect">¿Cuál Cuota Especial?</label>
               <select id="ingCuotaEspSelect"></select>
             </div>
 
-            <!-- Si es Donación o Saldo Inicial -->
             <div id="bloqueOrigenExterno" class="hidden">
               <label for="ingOrigenTexto">Origen / Donante / Nota de Apertura</label>
-              <input type="text" id="ingOrigenTexto" placeholder="Ej. Saldo cierre año 2025-2026 / Donación Sr. Juan" />
+              <input type="text" id="ingOrigenTexto" placeholder="Ej. Apertura Julio / Donación Sr. Juan" />
             </div>
 
             <div class="row-2">
@@ -302,6 +317,11 @@
                 <label for="ingPeriodo">Mes / Período</label>
                 <input type="month" id="ingPeriodo" />
               </div>
+            </div>
+
+            <div id="bloqueTasaManualIng" class="hidden">
+              <label for="ingTasaManual">Tasa BCV histórica de esa fecha (Bs/$)</label>
+              <input type="number" step="0.0001" min="0.01" id="ingTasaManual" oninput="actualizarVistaConversion('ing')" placeholder="Ej. 38.50" />
             </div>
 
             <div class="row-2">
@@ -319,18 +339,18 @@
             </div>
 
             <div class="conversion-box" id="ingConversion">
-              Tasa BCV aplicada: -- | Equivalente estimado: --
+              Tasa BCV: -- | Equivalente: --
             </div>
 
-            <label for="ingDesc">Referencia / Observación</label>
-            <input type="text" id="ingDesc" placeholder="Ej. Pago Móvil ref. 4829 / Efectivo caja" />
+            <label for="ingDesc">Descripción / Referencia</label>
+            <input type="text" id="ingDesc" required placeholder="Ej. Pago Móvil ref. 4829 - Mensualidad Julio" />
 
             <button type="submit" class="btn btn-primary">Guardar en Libro Diario</button>
           </form>
         </div>
       </section>
 
-      <!-- TAB 3: REGISTRAR EGRESO (ACTIVIDADES / EMERGENCIAS) -->
+      <!-- TAB 3: EGRESOS -->
       <section id="tab-egreso" class="hidden">
         <div class="card">
           <div class="card-title">Registrar Egreso (Haber)</div>
@@ -366,6 +386,11 @@
               </div>
             </div>
 
+            <div id="bloqueTasaManualEgr" class="hidden">
+              <label for="egrTasaManual">Tasa BCV histórica de esa fecha (Bs/$)</label>
+              <input type="number" step="0.0001" min="0.01" id="egrTasaManual" oninput="actualizarVistaConversion('egr')" placeholder="Ej. 38.50" />
+            </div>
+
             <div class="row-2">
               <div>
                 <label for="egrMoneda">Moneda</label>
@@ -381,10 +406,10 @@
             </div>
 
             <div class="conversion-box" id="egrConversion">
-              Tasa BCV aplicada: -- | Equivalente estimado: --
+              Tasa BCV: -- | Equivalente: --
             </div>
 
-            <label for="egrDesc">Detalle / Soporte de Recibo</label>
+            <label for="egrDesc">Descripción / Soporte del Gasto</label>
             <textarea id="egrDesc" rows="2" required placeholder="Describe la actividad, emergencia o soporte del gasto..."></textarea>
 
             <button type="submit" class="btn btn-danger">Registrar Egreso en Haber</button>
@@ -392,12 +417,53 @@
         </div>
       </section>
 
-      <!-- TAB 4: DEUDORES DETALLADO -->
+      <!-- TAB 4: LIBRO CONTABLE POR MES -->
+      <section id="tab-libro" class="hidden">
+        <div class="card">
+          <div class="card-title">
+            <span>Libro Contable Mensual (Debe / Haber)</span>
+          </div>
+
+          <div class="row-2">
+            <div>
+              <label for="filtroMesLibro">Mes a Consultar</label>
+              <input type="month" id="filtroMesLibro" onchange="pintarLibroMensual()" />
+            </div>
+            <div>
+              <label for="filtroTipoLibro">Mostrar</label>
+              <select id="filtroTipoLibro" onchange="pintarLibroMensual()">
+                <option value="TODOS">Ingresos y Egresos</option>
+                <option value="INGRESO">Solo Ingresos (Debe)</option>
+                <option value="EGRESO">Solo Egresos (Haber)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="resumen-mes">
+            <div class="mini-stat">
+              <div class="mini-label">Ingresos Mes</div>
+              <div class="mini-val" id="mesTotalIngBs" style="color:var(--ok);">Bs 0,00</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-label">Egresos Mes</div>
+              <div class="mini-val" id="mesTotalEgrBs" style="color:var(--danger);">Bs 0,00</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-label">Neto Mes</div>
+              <div class="mini-val" id="mesNetoBs" style="color:var(--navy);">Bs 0,00</div>
+            </div>
+          </div>
+
+          <div id="listaLibroMensual">Selecciona un mes para consultar los asientos.</div>
+        </div>
+      </section>
+
+      <!-- TAB 5: DEUDORES Y WHATSAPP -->
       <section id="tab-deudores" class="hidden">
         <div class="card">
           <div class="card-title">Recordatorios de Cobro por WhatsApp</div>
           <p style="font-size:0.8rem; color:var(--muted); margin-bottom:10px;">
-            Calculado según la cuota mensual configurada en USD y convertido a la tasa BCV actual.
+            Detalle por concepto con monto en USD y equivalente en Bs a la tasa BCV actual.
           </p>
           <div id="listaCobros">Cargando...</div>
         </div>
@@ -413,6 +479,9 @@
       </button>
       <button class="nav-btn" data-tab="tab-egreso" onclick="cambiarTab('tab-egreso', this)">
         <span class="nav-icon">➖</span><span>Egreso</span>
+      </button>
+      <button class="nav-btn" data-tab="tab-libro" onclick="cambiarTab('tab-libro', this)">
+        <span class="nav-icon">📖</span><span>Libro</span>
       </button>
       <button class="nav-btn" data-tab="tab-deudores" onclick="cambiarTab('tab-deudores', this)">
         <span class="nav-icon">📋</span><span>Deudores</span>
@@ -430,8 +499,10 @@
       nombre: sessionStorage.getItem('leones_nombre') || '',
       rol: sessionStorage.getItem('leones_rol') || '',
       tasaHoy: 0,
-      cuotasConfig: { mensualUsd: 0 },
-      socios: []
+      cuotasConfig: { mensualUsd: 0, lcifUsd: 0, gobUsd: 0 },
+      cuotasEspeciales: [],
+      socios: [],
+      movimientos: []
     };
 
     if ('serviceWorker' in navigator) {
@@ -444,6 +515,7 @@
       document.getElementById('ingFecha').value = hoy;
       document.getElementById('egrFecha').value = hoy;
       document.getElementById('ingPeriodo').value = mesActual;
+      document.getElementById('filtroMesLibro').value = mesActual;
 
       if (ESTADO.token) {
         mostrarApp();
@@ -451,11 +523,15 @@
       }
     });
 
+    function fmtBs(val) {
+      return 'Bs ' + Number(val || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function mostrarToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.remove('hidden');
-      setTimeout(() => t.classList.add('hidden'), 3000);
+      setTimeout(() => t.classList.add('hidden'), 3200);
     }
 
     async function apiCall(payload) {
@@ -502,12 +578,13 @@
     }
 
     function cambiarTab(tabId, btn) {
-      ['tab-home', 'tab-ingreso', 'tab-egreso', 'tab-deudores'].forEach(id => {
+      ['tab-home', 'tab-ingreso', 'tab-egreso', 'tab-libro', 'tab-deudores'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
       document.getElementById(tabId).classList.remove('hidden');
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
+      if (tabId === 'tab-libro') pintarLibroMensual();
     }
 
     function alternarOrigenIngreso() {
@@ -532,8 +609,9 @@
       ESTADO.cuotasConfig = r.cuotasConfig || { mensualUsd: 0, lcifUsd: 0, gobUsd: 0 };
       ESTADO.cuotasEspeciales = r.cuotasEspeciales || [];
       ESTADO.socios = r.socios || [];
+      ESTADO.movimientos = r.movimientos || [];
 
-      document.getElementById('tasaHeader').textContent = `BCV: ${ESTADO.tasaHoy.toFixed(2)} Bs/$`;
+      document.getElementById('tasaHeader').textContent = `BCV hoy: ${ESTADO.tasaHoy.toFixed(2)} Bs/$`;
       document.getElementById('cuotaRefBadge').textContent =
         `Club $${ESTADO.cuotasConfig.mensualUsd} | LCIF $${ESTADO.cuotasConfig.lcifUsd} | Gob $${ESTADO.cuotasConfig.gobUsd}`;
 
@@ -550,37 +628,40 @@
 
       pintarSociosYDeudas();
       pintarMovimientos(r.ultimosMovimientos || []);
+      pintarLibroMensual();
       actualizarVistaConversion('ing');
       actualizarVistaConversion('egr');
+    }
+
+    function pintarSaldo(key, obj) {
+      const bs = Number(obj?.bs || 0);
+      const usdHoy = ESTADO.tasaHoy > 0 ? (bs / ESTADO.tasaHoy) : 0;
+      document.getElementById(`saldo${key}Bs`).textContent = fmtBs(bs);
+      document.getElementById(`saldo${key}Usd`).textContent = `$${usdHoy.toFixed(2)} (hoy)`;
     }
 
     function calcularDeudaSocio(socio) {
       const cfg = ESTADO.cuotasConfig;
       const hoy = new Date();
       const mesActual = hoy.getMonth() + 1;
-      // Meses transcurridos en el año leonístico (Julio = 1 ... Junio = 12)
       const mesesTranscurridos = mesActual >= 7 ? (mesActual - 7 + 1) : (mesActual + 6);
 
       const sumarPagos = (cat) => (socio.pagos || [])
         .filter(p => p.categoria === cat)
         .reduce((acc, p) => acc + Number(p.usd || 0), 0);
 
-      // 1. Mensualidad Club
       const mesesPagClub = cfg.mensualUsd > 0 ? Math.floor(sumarPagos('Mensualidad') / cfg.mensualUsd) : mesesTranscurridos;
       const mesesDebClub = Math.max(0, mesesTranscurridos - mesesPagClub);
       const usdClub = Number((mesesDebClub * cfg.mensualUsd).toFixed(2));
 
-      // 2. LCIF
       const mesesPagLcif = cfg.lcifUsd > 0 ? Math.floor(sumarPagos('LCIF') / cfg.lcifUsd) : mesesTranscurridos;
       const mesesDebLcif = Math.max(0, mesesTranscurridos - mesesPagLcif);
       const usdLcif = Number((mesesDebLcif * cfg.lcifUsd).toFixed(2));
 
-      // 3. Gobernación
       const mesesPagGob = cfg.gobUsd > 0 ? Math.floor(sumarPagos('Gobernacion') / cfg.gobUsd) : mesesTranscurridos;
       const mesesDebGob = Math.max(0, mesesTranscurridos - mesesPagGob);
       const usdGob = Number((mesesDebGob * cfg.gobUsd).toFixed(2));
 
-      // 4. Cuotas Especiales activas
       let usdEsp = 0;
       const especialesPendientes = [];
       (ESTADO.cuotasEspeciales || []).forEach(ce => {
@@ -622,7 +703,7 @@
           ? `<span class="pill-debt">Debe $${d.totalUsd.toFixed(2)}</span>`
           : `<span class="pill-ok">Solvente</span>`;
         const subtexto = d.totalUsd > 0
-          ? `${d.detalle.join(' • ')} | Eq: Bs ${d.totalBs.toFixed(2)}`
+          ? `${d.detalle.join(' • ')} | Eq hoy: ${fmtBs(d.totalBs)}`
           : 'Al día en Club, LCIF, Gobernación y especiales';
 
         return `
@@ -647,8 +728,8 @@
         const tel = String(s.telefono || '').replace(/\D/g, '');
         const texto = encodeURIComponent(
           `Hola ${s.nombre}, le saludamos desde la Tesorería del Club de Leones.\n` +
-          `Detalle de saldo pendiente:\n- ${d.detalle.join('\n- ')}\n` +
-          `Total: $${d.totalUsd.toFixed(2)} (equiv. a Bs ${d.totalBs.toFixed(2)} a tasa BCV de hoy). ¡Muchas gracias!`
+          `Detalle pendiente:\n- ${d.detalle.join('\n- ')}\n` +
+          `Total: $${d.totalUsd.toFixed(2)} (equiv. a ${fmtBs(d.totalBs)} a tasa BCV de hoy). ¡Gracias!`
         );
         const waLink = tel ? `https://wa.me/${tel}?text=${texto}` : `https://wa.me/?text=${texto}`;
         return `
@@ -663,11 +744,132 @@
       }).join('');
     }
 
+    function pintarMovimientos(movs) {
+      const cont = document.getElementById('listaMovimientos');
+      if (!movs.length) {
+        cont.innerHTML = '<p style="font-size:0.82rem; color:var(--muted);">Sin movimientos registrados aún.</p>';
+        return;
+      }
+
+      cont.innerHTML = movs.map(m => {
+        const esIng = m.tipo === 'INGRESO';
+        const montoBs = esIng ? Number(m.dBs || 0) : Number(m.hBs || 0);
+        const montoUsd = esIng ? Number(m.dUsd || 0) : Number(m.hUsd || 0);
+        return `
+          <div class="mov-item">
+            <div>
+              <div class="mov-title">${m.sujeto} • <span style="color:var(--muted); font-weight:600;">${m.cat}</span></div>
+              ${m.desc ? `<div class="mov-desc">${m.desc}</div>` : ''}
+              <div class="mov-meta">${m.fecha} • ${m.fondo} • Tasa ${Number(m.tasa || 0).toFixed(2)}</div>
+            </div>
+            <div class="${esIng ? 'monto-in' : 'monto-out'}">
+              ${esIng ? '+' : '-'}${fmtBs(montoBs)}
+              <div class="mov-meta">$${montoUsd.toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function pintarLibroMensual() {
+      const mesSel = document.getElementById('filtroMesLibro').value; // YYYY-MM
+      const tipoSel = document.getElementById('filtroTipoLibro').value;
+      const cont = document.getElementById('listaLibroMensual');
+
+      const filtrados = (ESTADO.movimientos || []).filter(m => {
+        const coincideMes = !mesSel || String(m.fecha || '').startsWith(mesSel);
+        const coincideTipo = tipoSel === 'TODOS' || m.tipo === tipoSel;
+        return coincideMes && coincideTipo;
+      });
+
+      const delMes = (ESTADO.movimientos || []).filter(m => !mesSel || String(m.fecha || '').startsWith(mesSel));
+      const totIngBs = delMes.filter(m => m.tipo === 'INGRESO').reduce((a, b) => a + Number(b.debeBs || 0), 0);
+      const totEgrBs = delMes.filter(m => m.tipo === 'EGRESO').reduce((a, b) => a + Number(b.haberBs || 0), 0);
+      const netoBs = totIngBs - totEgrBs;
+
+      document.getElementById('mesTotalIngBs').textContent = fmtBs(totIngBs);
+      document.getElementById('mesTotalEgrBs').textContent = fmtBs(totEgrBs);
+      document.getElementById('mesNetoBs').textContent = fmtBs(netoBs);
+
+      if (!filtrados.length) {
+        cont.innerHTML = `<p style="font-size:0.82rem; color:var(--muted);">No hay movimientos registrados en ${mesSel || 'ese período'}.</p>`;
+        return;
+      }
+
+      cont.innerHTML = filtrados.map(m => {
+        const esIng = m.tipo === 'INGRESO';
+        const bs = esIng ? m.debeBs : m.haberBs;
+        const usd = esIng ? m.debeUsd : m.haberUsd;
+        return `
+          <div class="mov-item">
+            <div>
+              <div class="mov-title">${m.fecha} — ${m.sujeto} <span style="color:var(--muted); font-weight:600;">(${m.categoria})</span></div>
+              <div class="mov-desc">${m.descripcion || 'Sin descripción'}</div>
+              <div class="mov-meta">Fondo: ${m.fondo} • ${esIng ? 'DEBE' : 'HABER'} • Tasa fecha: ${Number(m.tasa || 0).toFixed(2)}</div>
+            </div>
+            <div class="${esIng ? 'monto-in' : 'monto-out'}">
+              ${esIng ? '+' : '-'}${fmtBs(bs)}
+              <div class="mov-meta">$${Number(usd || 0).toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function actualizarVistaConversion(prefijo) {
+      const fecha = document.getElementById(`${prefijo}Fecha`).value;
+      const moneda = document.getElementById(`${prefijo}Moneda`).value;
+      const monto = Number(document.getElementById(`${prefijo}Monto`).value || 0);
+      const box = document.getElementById(`${prefijo}Conversion`);
+      const bloqueManual = document.getElementById(prefijo === 'ing' ? 'bloqueTasaManualIng' : 'bloqueTasaManualEgr');
+      const inputManual = document.getElementById(prefijo === 'ing' ? 'ingTasaManual' : 'egrTasaManual');
+
+      let tasa = 0;
+      let notaFecha = '';
+
+      if (fecha) {
+        const resp = await apiCall({ action: 'getTasaFecha', token: ESTADO.token, usuario: ESTADO.usuario, fecha });
+        if (resp.ok) {
+          if (resp.exacta && Number(resp.tasa) > 0) {
+            tasa = Number(resp.tasa);
+            bloqueManual.classList.add('hidden');
+            notaFecha = `Tasa exacta (${fecha}): ${tasa.toFixed(2)} Bs/$`;
+          } else {
+            bloqueManual.classList.remove('hidden');
+            const manualVal = Number(inputManual.value || 0);
+            if (manualVal > 0) {
+              tasa = manualVal;
+              notaFecha = `Tasa manual (${fecha}): ${tasa.toFixed(2)} Bs/$`;
+            } else if (Number(resp.tasa) > 0) {
+              tasa = Number(resp.tasa);
+              notaFecha = `Sin tasa exacta en ${fecha}; ref. anterior (${resp.fechaUsada || 'previa'}): ${tasa.toFixed(2)} Bs/$ (puedes indicar tasa manual arriba)`;
+            } else {
+              notaFecha = `No hay tasa en el histórico para ${fecha}; ingresa la tasa BCV de esa fecha arriba.`;
+            }
+          }
+        }
+      }
+
+      if (!tasa || monto <= 0) {
+        box.textContent = notaFecha || 'Ingresa fecha y monto para calcular.';
+        return;
+      }
+
+      if (moneda === 'BS') {
+        const usd = (monto / tasa).toFixed(2);
+        box.textContent = `${notaFecha} → Equivale a $${usd} USD`;
+      } else {
+        const bs = (monto * tasa).toFixed(2);
+        box.textContent = `${notaFecha} → Equivale a ${fmtBs(bs)}`;
+      }
+    }
+
     async function enviarMovimiento(e, tipo) {
       e.preventDefault();
       const esIng = tipo === 'INGRESO';
       const cat = document.getElementById(esIng ? 'ingCategoria' : 'egrCategoria').value;
       const esExterno = esIng && ['Donacion', 'Saldo Inicial', 'Actividad'].includes(cat);
+      const tasaManualVal = Number(document.getElementById(esIng ? 'ingTasaManual' : 'egrTasaManual').value || 0);
 
       let sujeto = '';
       if (!esIng) {
@@ -693,6 +895,7 @@
         periodo: esIng ? document.getElementById('ingPeriodo').value : 'N/A',
         moneda: document.getElementById(esIng ? 'ingMoneda' : 'egrMoneda').value,
         monto: Number(document.getElementById(esIng ? 'ingMonto' : 'egrMonto').value),
+        tasaManual: tasaManualVal > 0 ? tasaManualVal : null,
         descripcion: desc
       };
 
@@ -705,7 +908,7 @@
 
       if (!r.ok) return mostrarToast(r.error || 'No se pudo guardar');
 
-      mostrarToast(`Guardado: $${r.montoUsd.toFixed(2)} / Bs ${r.montoBs.toFixed(2)}`);
+      mostrarToast(`Guardado: ${fmtBs(r.montoBs)} ($${r.montoUsd.toFixed(2)})`);
       e.target.reset();
       alternarOrigenIngreso();
 
@@ -716,66 +919,6 @@
       await cargarDashboard();
       cambiarTab('tab-home', document.querySelector('.nav-btn[data-tab="tab-home"]'));
     }
-
-    function pintarSaldo(key, obj) {
-      const usd = Number(obj?.usd || 0);
-      const bs = Number(obj?.bs || 0);
-      document.getElementById(`saldo${key}Usd`).textContent = `$${usd.toFixed(2)}`;
-      document.getElementById(`saldo${key}Bs`).textContent = `Bs ${bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
-
-    function pintarMovimientos(movs) {
-      const cont = document.getElementById('listaMovimientos');
-      if (!movs.length) {
-        cont.innerHTML = '<p style="font-size:0.82rem; color:var(--muted);">Sin movimientos registrados aún.</p>';
-        return;
-      }
-
-      cont.innerHTML = movs.map(m => {
-        const esIng = m.tipo === 'INGRESO';
-        const montoUsd = esIng ? Number(m.dUsd || 0) : Number(m.hUsd || 0);
-        const montoBs = esIng ? Number(m.dBs || 0) : Number(m.hBs || 0);
-        return `
-          <div class="mov-item">
-            <div>
-              <div class="mov-title">${m.sujeto} • <span style="color:var(--muted); font-weight:600;">${m.cat}</span></div>
-              <div class="mov-meta">${m.fecha} • Fondo ${m.fondo} • Tasa ${Number(m.tasa || 0).toFixed(2)}</div>
-            </div>
-            <div class="${esIng ? 'monto-in' : 'monto-out'}">
-              ${esIng ? '+' : '-'}$${montoUsd.toFixed(2)}
-              <div class="mov-meta">Bs ${montoBs.toFixed(2)}</div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    async function actualizarVistaConversion(prefijo) {
-      const fecha = document.getElementById(`${prefijo}Fecha`).value;
-      const moneda = document.getElementById(`${prefijo}Moneda`).value;
-      const monto = Number(document.getElementById(`${prefijo}Monto`).value || 0);
-      const box = document.getElementById(`${prefijo}Conversion`);
-
-      let tasa = ESTADO.tasaHoy;
-      if (fecha) {
-        const resp = await apiCall({ action: 'getTasaFecha', token: ESTADO.token, usuario: ESTADO.usuario, fecha });
-        if (resp.ok && Number(resp.tasa) > 0) tasa = Number(resp.tasa);
-      }
-
-      if (!tasa || monto <= 0) {
-        box.textContent = `Tasa BCV (${fecha || 'hoy'}): ${tasa ? tasa.toFixed(2) + ' Bs/$' : 'no disponible'}`;
-        return;
-      }
-
-      if (moneda === 'BS') {
-        const usd = (monto / tasa).toFixed(2);
-        box.textContent = `Tasa BCV (${fecha}): ${tasa.toFixed(2)} Bs/$ → Equivale a $${usd} USD`;
-      } else {
-        const bs = (monto * tasa).toFixed(2);
-        box.textContent = `Tasa BCV (${fecha}): ${tasa.toFixed(2)} Bs/$ → Equivale a Bs ${bs}`;
-      }
-    }
-
   </script>
 </body>
 </html>
